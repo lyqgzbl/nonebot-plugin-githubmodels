@@ -3,6 +3,7 @@ from openai import OpenAI
 from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
+from nonebot.plugin import PluginMetadata
 config = nonebot.get_driver().config
 token = config.github_token
 endpoint = "https://models.inference.ai.azure.com"
@@ -39,3 +40,11 @@ async def handle_function(args: Message = CommandArg()):
     reply = response.choices[0].message.content
     shared_context.append({"role": "assistant", "content": reply})
     await AI.send(reply, reply_message=True)
+    
+    __plugin_meta__ = PluginMetadata(
+    name="githubmobile",
+    description="API 调用 GitHub Mobile 的 GPT-4o 模型",
+    type="application",
+    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmobile",
+    supported_adapters={"~onebot.v11"},
+    )
