@@ -41,7 +41,7 @@ async def handle_function(args: Message = CommandArg()):
     shared_context.append({"role": "assistant", "content": reply})
     await AI.send(reply, reply_message=True)
     
-    __plugin_meta__ = PluginMetadata(
+__plugin_meta__ = PluginMetadata(
     name="githubmobile",
     description="API 调用 GitHub Mobile 的 GPT-4o 模型",
     type="application",
