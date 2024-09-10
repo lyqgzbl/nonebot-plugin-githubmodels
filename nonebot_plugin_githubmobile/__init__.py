@@ -4,7 +4,6 @@ from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
-
 # 获取配置
 config = nonebot.get_driver().config
 token = config.github_token
