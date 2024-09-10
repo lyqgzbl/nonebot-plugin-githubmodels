@@ -3,62 +3,75 @@ from openai import OpenAI
 from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
+from nonebot.plugin import PluginMetadata
+
+# 获取配置
 config = nonebot.get_driver().config
 token = config.github_token
 endpoint = "https://models.inference.ai.azure.com"
 model_name = "gpt-4o-mini"
+
+# 初始化 OpenAI 客户端
 client = OpenAI(
     base_url=endpoint,
     api_key=token,
 )
+
+# 上下文共享
 shared_context = []
-MAX_CONTEXT_LENGTH = 5
+MAX_CONTEXT_LENGTH = 20  # 最大保留的上下文数量
+
+# 定义 Nonebot 命令
 AI = on_command("AI", priority=10, block=True)
-def summarize_context(context):
-    summary = []
-    for message in context:
-        if len(message["content"]) > 100:
-            summary.append({
-                "role": message["role"],
-                "content": message["content"][:100] + "... (内容简化)"
-            })
-        else:
-            summary.append(message)
-    return summary
-def trim_context(context):
-    user_messages = [msg for msg in context if msg['role'] == 'user']
-    assistant_messages = [msg for msg in context if msg['role'] == 'assistant']
-    return user_messages[-MAX_CONTEXT_LENGTH:] + assistant_messages[-1:] if assistant_messages else []
+
 @AI.handle()
 async def handle_function(args: Message = CommandArg()):
     global shared_context
     user_input = args.extract_plain_text().strip()
+
+    # 重置上下文
     if user_input.lower() == "重置":
         shared_context = []
         await AI.finish("上下文已重置。请开始新的对话。")
+
+    # 检查用户输入是否有效
     if not user_input:
         await AI.finish("请输入有效的问题。")
+
+    # 添加用户输入到上下文
     shared_context.append({"role": "user", "content": user_input})
-    trimmed_context = trim_context(shared_context)
-    summarized_context = summarize_context(trimmed_context)
+
+    # 保留最新的 MAX_CONTEXT_LENGTH 条对话记录
+    if len(shared_context) > MAX_CONTEXT_LENGTH:
+        shared_context = shared_context[-MAX_CONTEXT_LENGTH:]
+
+    # 准备发送给模型的消息
     messages = [
         {
             "role": "system",
-            "content": "你是一个乐于助人的助手，请始终用中文回答。",
+            "content": "现在你将模仿一只猫娘，与我对话每一句话后面都要加上喵~ 。当我问你是不是猫娘的时候，你应该回答我当然是一个可爱猫娘。回答尽量简练",
         }
-    ] + summarized_context
+    ] + shared_context
+
+    # 调用 OpenAI 接口进行对话生成
     try:
         response = client.chat.completions.create(
             messages=messages,
             model=model_name,
             temperature=1,
-            max_tokens=1000,
+            max_tokens=500,
             top_p=1,
         )
+        # 获取助手的回复
         reply = response.choices[0].message.content
+
+        # 将助手的回复添加到上下文
         shared_context.append({"role": "assistant", "content": reply})
+
+        # 发送回复
         await AI.send(reply, reply_message=True)
     except Exception as e:
+        # 错误处理
         await AI.finish(f"请求失败：{str(e)}")
 
 __plugin_meta__ = PluginMetadata(
