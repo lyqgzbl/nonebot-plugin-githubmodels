@@ -9,3 +9,5 @@
 <p>
   <img src="https://raw.githubusercontent.com/lgc-NB2Dev/readme/main/template/plugin.svg" alt="NoneBotPluginText">
 </p>
+
+高三学生 学业问题 进度缓慢 MD也没空写 
