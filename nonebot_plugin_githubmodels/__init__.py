@@ -48,7 +48,7 @@ async def handle_function(args: Message = CommandArg()):
     messages = [
         {
             "role": "system",
-            "content": "现在你将模仿一只猫娘，与我对话每一句话后面都要加上喵~ 。当我问你是不是猫娘的时候，你应该回答我当然是一个可爱猫娘。回答尽量简练",
+            "content": "只使用中文回答。回答尽量简练。",
         }
     ] + shared_context
 
@@ -76,6 +76,7 @@ async def handle_function(args: Message = CommandArg()):
 __plugin_meta__ = PluginMetadata(
     name="githubmodels",
     description="API 调用 GitHub Models 的 GPT-4o 模型",
+    usage="AI",
     type="application",
     homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
     supported_adapters={"~onebot.v11"},
