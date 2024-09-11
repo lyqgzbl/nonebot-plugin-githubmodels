@@ -1,20 +1,17 @@
 import nonebot
-from openai import OpenAI
+import openai
 from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
+
 # 获取配置
 config = nonebot.get_driver().config
 token = config.github_token
-endpoint = "https://models.inference.ai.azure.com"
 model_name = "gpt-4o-mini"
 
-# 初始化 OpenAI 客户端
-client = OpenAI(
-    base_url=endpoint,
-    api_key=token,
-)
+# 设置 OpenAI API 密钥
+openai.api_key = token
 
 # 上下文共享
 shared_context = []
@@ -54,15 +51,15 @@ async def handle_function(args: Message = CommandArg()):
 
     # 调用 OpenAI 接口进行对话生成
     try:
-        response = client.chat.completions.create(
-            messages=messages,
+        response = openai.ChatCompletion.create(
             model=model_name,
+            messages=messages,
             temperature=1,
             max_tokens=500,
             top_p=1,
         )
         # 获取助手的回复
-        reply = response.choices[0].message.content
+        reply = response.choices[0].message['content']
 
         # 将助手的回复添加到上下文
         shared_context.append({"role": "assistant", "content": reply})
@@ -80,4 +77,4 @@ __plugin_meta__ = PluginMetadata(
     type="application",
     homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
     supported_adapters={"~onebot.v11"},
-    )
+)
