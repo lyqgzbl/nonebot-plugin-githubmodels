@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "nonebot-plugin-githubmodels"
+version = "0.1.0"
+description = "API 调用 GitHub Models 的 GPT-4o 模型"
+authors = ["lyqgzbl <admin@lyqgzbl.com>"]
+license = "MIT"
+homepage = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
+repository = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+nonebot2 = { version = "^2.0.0", extras = ["fastapi"] }
+openai = "^0.27.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.nonebot.plugin]
+name = "githubmodels"
+description = "API 调用 GitHub Models 的 GPT-4o 模型"
+type = "application"
+supported_adapters = ["~onebot.v11"]
