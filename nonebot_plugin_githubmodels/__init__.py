@@ -74,9 +74,9 @@ async def handle_function(args: Message = CommandArg()):
         await AI.finish(f"请求失败：{str(e)}")
 
 __plugin_meta__ = PluginMetadata(
-    name="githubmobile",
+    name="githubmodels",
     description="API 调用 GitHub Models 的 GPT-4o 模型",
     type="application",
-    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmobile",
+    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
     supported_adapters={"~onebot.v11"},
     )
