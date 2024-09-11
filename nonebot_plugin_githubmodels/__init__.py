@@ -9,10 +9,10 @@ from nonebot.plugin import PluginMetadata
 config = nonebot.get_driver().config
 token = config.github_token
 model_name = "gpt-4o-mini"
-
-# 设置 OpenAI API 密钥
-openai.api_key = token
-
+client = OpenAI(
+    base_url=endpoint,
+    api_key=token,
+)
 # 上下文共享
 shared_context = []
 MAX_CONTEXT_LENGTH = 20  # 最大保留的上下文数量
@@ -40,24 +40,19 @@ async def handle_function(args: Message = CommandArg()):
     # 保留最新的 MAX_CONTEXT_LENGTH 条对话记录
     if len(shared_context) > MAX_CONTEXT_LENGTH:
         shared_context = shared_context[-MAX_CONTEXT_LENGTH:]
-
-    # 准备发送给模型的消息
     messages = [
         {
             "role": "system",
-            "content": "只使用中文回答。回答尽量简练。",
+            "content": "你是一个乐于助人的助手，请始终用中文回答。",
         }
     ] + shared_context
-
-    # 调用 OpenAI 接口进行对话生成
-    try:
-        response = openai.ChatCompletion.create(
-            model=model_name,
-            messages=messages,
-            temperature=1,
-            max_tokens=500,
-            top_p=1,
-        )
+    response = client.chat.completions.create(
+        messages=messages,
+        model=model_name,
+        temperature=1,
+        max_tokens=1000,
+        top_p=1,
+    ）
         # 获取助手的回复
         reply = response.choices[0].message['content']
 
