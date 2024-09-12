@@ -3,6 +3,7 @@ from openai import OpenAI
 from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
+from nonebot.plugin import PluginMetadata
 
 config = nonebot.get_driver().config
 token = config.github_token
@@ -54,11 +55,11 @@ async def handle_function(args: Message = CommandArg()):
     
     await AI.send(reply, reply_message=True)
 
-#__plugin_meta__ = PluginMetadata(
-#    name="githubmodels",
-#    description="API 调用 GitHub Models 的 GPT-4o 模型",
-#    usage="AI",
-#    type="application",
-#    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
-#    supported_adapters={"~onebot.v11"},
-#)
+__plugin_meta__ = PluginMetadata(
+    name="githubmodels",
+    description="API 调用 GitHub Models 的 GPT-4o 模型",
+    usage="AI",
+    type="application",
+    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
+    supported_adapters={"~onebot.v11"},
+)
