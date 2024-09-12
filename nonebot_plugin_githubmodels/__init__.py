@@ -35,14 +35,14 @@ async def handle_function(args: Message = CommandArg()):
     messages = [
         {
             "role": "system",
-            "content": "你是一个乐于助人的助手，请始终用中文回答。",
+            "content": "回答尽量简练，请始终用中文回答。",
         }
     ] + shared_context
     response = client.chat.completions.create(
         messages=messages,
         model=model_name,
         temperature=1,
-        max_tokens=1000,
+        max_tokens=500,
         top_p=1,
     )
     reply = response.choices[0].message.content
@@ -54,11 +54,11 @@ async def handle_function(args: Message = CommandArg()):
     
     await AI.send(reply, reply_message=True)
 
-__plugin_meta__ = PluginMetadata(
-    name="githubmodels",
-    description="API 调用 GitHub Models 的 GPT-4o 模型",
-    usage="AI",
-    type="application",
-    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
-    supported_adapters={"~onebot.v11"},
-)
+#__plugin_meta__ = PluginMetadata(
+#    name="githubmodels",
+#    description="API 调用 GitHub Models 的 GPT-4o 模型",
+#    usage="AI",
+#    type="application",
+#    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
+#    supported_adapters={"~onebot.v11"},
+#)
