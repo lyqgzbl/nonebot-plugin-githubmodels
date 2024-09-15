@@ -20,4 +20,3 @@ build-backend = "poetry.core.masonry.api"
 name = "githubmodels"
 description = "API 调用 GitHub Models 的 GPT-4o 模型"
 type = "application"
-supported_adapters = ["~onebot.v11"]
