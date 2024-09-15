@@ -9,9 +9,8 @@ repository = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-nonebot2 = { version = "^2.0.0", extras = ["fastapi"] }
+nonebot2 = "^2.0.0"
 openai = "^1.44.1"
-nonebot-adapter-onebot = "^2.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
