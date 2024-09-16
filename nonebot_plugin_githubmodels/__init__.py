@@ -62,4 +62,5 @@ __plugin_meta__ = PluginMetadata(
     usage="AI",
     type="application",
     homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
+    supported_adapters=None,
 )
