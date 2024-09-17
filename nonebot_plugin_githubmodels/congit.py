@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 
 class Config(BaseModel):
   token: Optional[str] = Field(default=None)
-  model_name: Optional[str] = Field(default=“gpt-4o-mini”)
-  MAX_CONTEXT_LENGTH: Optionsl[int] = Field(defalut=20)
+    model_name: Optional[str] = Field(default="gpt-4o-mini")
+    MAX_CONTEXT_LENGTH: Optional[int] = Field(default=20) 
 
 plugin_config: Config = get_plugin_config(Config)
 TOKEN = plugin_config.github_token
