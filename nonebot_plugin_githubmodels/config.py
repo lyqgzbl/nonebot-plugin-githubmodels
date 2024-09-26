@@ -1,13 +1,25 @@
 from typing import Optional
+from nonebot import get_driver
 from nonebot import get_plugin_config
-from pydantic import BaseModel, Field
 
-class Config(BaseModel):
-  token: Optional[str] = Field(default=None)
-  model_name: Optional[str] = Field(default="gpt-4o-mini")
-  MAX_CONTEXT_LENGTH: Optional[int] = Field(default=20) 
+class Config:
+    def __init__(self):
+        try:
+            self.github_token = get_driver().config.github_token  
+        except AttributeError:
+            self.github_token = None
+            
+        try:
+            self.model_name = get_driver().config.model_name
+        except AttributeError:
+            self.model_name = "gpt-4o-mini"
+            
+        try:
+            self.MAX_CONTEXT_LENGTH = get_driver().config.MAX_CONTEXT_LENGTH
+        except AttributeError:
+            self.MAX_CONTEXT_LENGTH = 20
 
-plugin_config: Config = get_plugin_config(Config)
-TOKEN = plugin_config.github_token
-MODEL_NAME = plugin_config.model_name
-MAX_CONTEXT_LENGTH = plugin_config.MAX_CONTEXT_LENGTH
+config = Config()  
+TOKEN = config.github_token 
+MODEL_NAME = config.model_name
+MAX_CONTEXT_LENGTH = config.MAX_CONTEXT_LENGTH

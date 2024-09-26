@@ -4,17 +4,15 @@ from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
+from .config import TOKEN,MODEL_NAME,MAX_CONTEXT_LENGTH,Config
 
-config = nonebot.get_driver().config
-token = config.github_token
 endpoint = "https://models.inference.ai.azure.com"
-model_name = "gpt-4o-mini"
 client = AsyncOpenAI(
     base_url=endpoint,
-    api_key=token,
+    api_key=TOKEN,
 )
+
 shared_context = []
-MAX_CONTEXT_LENGTH = 20  # 上下文最大保留条数
 AI = on_command("AI", priority=10, block=True)
 
 @AI.handle()
@@ -41,7 +39,7 @@ async def handle_function(args: Message = CommandArg()):
     
     response = await client.chat.completions.create(
         messages=messages,
-        model=model_name,
+        model=MODEL_NAME,
         temperature=1,
         max_tokens=500,
         top_p=1,
@@ -54,6 +52,9 @@ async def handle_function(args: Message = CommandArg()):
         shared_context = shared_context[-MAX_CONTEXT_LENGTH:]
     
     await AI.send(reply, reply_message=True)
+    reply = response.choices[0].message.content
+    shared_context.append({"role": "assistant", "content": reply})
+    
 
 
 __plugin_meta__ = PluginMetadata(
