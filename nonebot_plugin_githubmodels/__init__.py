@@ -1,6 +1,7 @@
 import nonebot
 from openai import AsyncOpenAI
 from nonebot import on_command
+from nonebot import get_plugin_config
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
