@@ -4,7 +4,13 @@ from nonebot import on_command
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
-from .config import TOKEN,MODEL_NAME,MAX_CONTEXT_LENGTH,Config
+from .config import Config
+
+plugin_config = get_plugin_config(Config)
+
+TOKEN = plugin_config.github_token 
+MODEL_NAME = plugin_config.ai_model_name
+MAX_CONTEXT_LENGTH = plugin_config.MAX_CONTEXT_LENGTH
 
 endpoint = "https://models.inference.ai.azure.com"
 client = AsyncOpenAI(
@@ -55,8 +61,6 @@ async def handle_function(args: Message = CommandArg()):
     reply = response.choices[0].message.content
     shared_context.append({"role": "assistant", "content": reply})
     
-
-
 __plugin_meta__ = PluginMetadata(
     name="githubmodels",
     description="API 调用 GitHub Models 的 GPT-4o 模型",
