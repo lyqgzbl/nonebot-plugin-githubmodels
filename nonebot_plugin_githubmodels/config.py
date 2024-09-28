@@ -1,25 +1,14 @@
 from typing import Optional
-from nonebot import get_driver
-from nonebot import get_plugin_config
+from pydantic import BaseModel, field_validator
 
-class Config:
-    def __init__(self):
-        try:
-            self.github_token = get_driver().config.github_token  
-        except AttributeError:
-            self.github_token = None
-            
-        try:
-            self.model_name = get_driver().config.model_name
-        except AttributeError:
-            self.model_name = "gpt-4o-mini"
-            
-        try:
-            self.MAX_CONTEXT_LENGTH = get_driver().config.MAX_CONTEXT_LENGTH
-        except AttributeError:
-            self.MAX_CONTEXT_LENGTH = 20
+class Config(BaseModel):
+    github_token: Optional[str] = None
+    ai_model_name: str = "gpt-4o-mini"
+    MAX_CONTEXT_LENGTH: int = 20
 
-config = Config()  
-TOKEN = config.github_token 
-MODEL_NAME = config.model_name
-MAX_CONTEXT_LENGTH = config.MAX_CONTEXT_LENGTH
+    @field_validator("MAX_CONTEXT_LENGTH")
+    @classmethod
+    def check_max_context_length(cls, v: int) -> int:
+        if v > 0:
+            return v
+        raise ValueError("MAX_CONTEXT_LENGTH must be greater than 0")
