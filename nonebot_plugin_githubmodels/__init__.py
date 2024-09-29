@@ -11,7 +11,7 @@ plugin_config = get_plugin_config(Config)
 
 TOKEN = plugin_config.github_token 
 MODEL_NAME = plugin_config.ai_model_name
-MAX_CONTEXT_LENGTH = plugin_config.MAX_CONTEXT_LENGTH
+MAX_CONTEXT_LENGTH = plugin_config.max_context_length
 
 endpoint = "https://models.inference.ai.azure.com"
 client = AsyncOpenAI(
