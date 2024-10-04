@@ -10,7 +10,7 @@
   <img src="https://raw.githubusercontent.com/lgc-NB2Dev/readme/main/template/plugin.svg" alt="NoneBotPluginText">
 </p>
 
-# nonebot-plugin-heweather
+# nonebot-plugin-githubmodels
 
 _✨ API调用GitHub models大语言模型 ✨_
 
@@ -27,3 +27,41 @@ _✨ API调用GitHub models大语言模型 ✨_
 </p>
 
 <div align="center">
+
+## 安装
+* 使用nb-cli  
+```shell
+nb plugin install nonebot_plugin_githubmodels
+```
+## 指令
+
+“AIxxx”  询问AI
+例如“AI 嗨”
+
+”AI 重置“  重置上下文记忆
+
+## 配置
+
+## GitHub token 必须配置 环境配置
+
+```
+GITHUB.TOKEN = xxx
+```
+
+## 所使用的模型 可选配置 环境配置
+gpt-4o
+gpt-4o-mini
+默认值为gpt-4o-mini
+
+```
+AI.MODEL.NAME = gpt-4o-mini
+```
+
+## 记忆的上下文数量 可选配置 环境配置
+默认值为20
+
+```
+MAX.CONTEXT.LENGTH = 20
+```
+
+
