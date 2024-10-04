@@ -32,7 +32,7 @@ _✨ API调用GitHub models大语言模型 ✨_
 
 使用nb-cli  
 ```shell
-nb plugin install nonebot_plugin_githubmodels
+nb plugin install nonebot-plugin-githubmodels
 ```
 
 # 指令
