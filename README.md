@@ -26,8 +26,6 @@ _✨ API调用GitHub models大语言模型 ✨_
   <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="python">
 </p>
 
-<div align="center">
-
 # 安装
 
 使用nb-cli  
