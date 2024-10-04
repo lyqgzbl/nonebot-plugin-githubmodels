@@ -45,7 +45,7 @@ nb plugin install nonebot-plugin-githubmodels
 ## GitHub token 必须配置 环境配置
 
 ```
-GITHUB.TOKEN = xxx
+GITHUB.TOKEN = "xxxx"
 ```
 
 ## 所使用的模型 可选配置 环境配置
