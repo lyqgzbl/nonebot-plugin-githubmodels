@@ -28,21 +28,21 @@ _✨ API调用GitHub models大语言模型 ✨_
 
 <div align="center">
 
-***
-  
-## 安装
+# 安装
+
 使用nb-cli  
 ```shell
 nb plugin install nonebot_plugin_githubmodels
 ```
-## 指令
+
+# 指令
 
 “AI xxx”  询问AI
 例如“AI 嗨”
 
 ”AI 重置“  重置上下文记忆
 
-## 配置
+# 配置
 
 ## GitHub token 必须配置 环境配置
 
