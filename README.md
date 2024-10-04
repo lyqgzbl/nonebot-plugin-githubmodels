@@ -50,9 +50,7 @@ GITHUB.TOKEN = xxx
 
 ## 所使用的模型 可选配置 环境配置
 
-gpt-4o
-gpt-4o-mini
-默认值为gpt-4o-mini
+gpt-4o / gpt-4o-mini / 默认值为gpt-4o-mini
 
 ```
 AI.MODEL.NAME = gpt-4o-mini
