@@ -1,14 +1,16 @@
 import nonebot
 from openai import AsyncOpenAI
-from nonebot import on_command
-from nonebot import get_plugin_config
+from nonebot import on_command, get_plugin_config, require
+require("nonebot_plugin_alconna")
+require("nonebot_plugin_htmlrender")
 from nonebot.adapters import Message
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
+from nonebot_plugin_alconna import UniMessage, Image 
+from nonebot_plugin_htmlrender import md_to_pic
 from .config import Config
 
 plugin_config = get_plugin_config(Config)
-
 TOKEN = plugin_config.github_token 
 MODEL_NAME = plugin_config.ai_model_name
 MAX_CONTEXT_LENGTH = plugin_config.max_context_length
@@ -18,19 +20,21 @@ client = AsyncOpenAI(
     base_url=endpoint,
     api_key=TOKEN,
 )
-
 shared_context = []
+
 AI = on_command("AI", priority=10, block=True)
 
 @AI.handle()
 async def handle_function(args: Message = CommandArg()):
     global shared_context
     user_input = args.extract_plain_text().strip()
+
     if user_input.lower() == "重置":
         shared_context = []
-        await AI.finish("上下文已重置。请开始新的对话。")
+        await AI.finish("上下文已重置")
+    
     if not user_input:
-        await AI.finish("请输入有效的问题。")
+        await AI.finish("请输入有效的问题")
     
     shared_context.append({"role": "user", "content": user_input})
     
@@ -54,17 +58,14 @@ async def handle_function(args: Message = CommandArg()):
     
     reply = response.choices[0].message.content
     shared_context.append({"role": "assistant", "content": reply})
-    
-    if len(shared_context) > MAX_CONTEXT_LENGTH:
-        shared_context = shared_context[-MAX_CONTEXT_LENGTH:]
-    
-    await AI.send(reply, reply_message=True)
-    reply = response.choices[0].message.content
-    shared_context.append({"role": "assistant", "content": reply})
-    
+
+
+    pic = await md_to_pic(md=reply)
+    await UniMessage.image(raw=pic).send(reply_to=True)
+		
 __plugin_meta__ = PluginMetadata(
     name="githubmodels",
-    description="API 调用 GitHub Models 的 GPT-4o 模型",
+    description="API 调用 GitHub Models 的大语言模型",
     usage="AI",
     type="application",
     homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
