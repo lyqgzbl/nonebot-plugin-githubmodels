@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "nonebot-plugin-githubmodels"
-version = "0.1.5"
-description = "API 调用 GitHub Models 的 GPT-4o 模型"
+version = "0.1.7"
+description = "API 调用 GitHub Models 的大语言模型"
 authors = ["lyqgzbl <admin@lyqgzbl.com>"]
 license = "MIT"
 homepage = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
@@ -11,6 +11,8 @@ repository = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
 python = "^3.8"
 nonebot2 = "^2.2.1"
 openai = "^1.44.1"
+nonebot-plugin-htmlrender = "^0.3.5"
+nonebot-plugin-alconna = "^0.52.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -18,5 +20,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.nonebot.plugin]
 name = "githubmodels"
-description = "API 调用 GitHub Models 的 GPT-4o 模型"
+description = "API 调用 GitHub Models 的大语言模型"
 type = "application"
