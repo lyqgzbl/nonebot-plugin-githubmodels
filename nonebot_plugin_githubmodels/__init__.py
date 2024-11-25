@@ -1,18 +1,21 @@
 import nonebot
+from .config import Config
+from nonebot import require
 from openai import AsyncOpenAI
-from nonebot import on_command, get_plugin_config, require
+from nonebot import on_command
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
 from nonebot.adapters import Message
+from nonebot import get_plugin_config
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
-from nonebot_plugin_alconna import UniMessage, Image 
 from nonebot_plugin_htmlrender import md_to_pic
-from .config import Config
+from nonebot_plugin_alconna import UniMessage, Image 
 
 plugin_config = get_plugin_config(Config)
 TOKEN = plugin_config.github_token 
 MODEL_NAME = plugin_config.ai_model_name
+REPLY_IMAGE = plugin_config.ai_reply_image
 MAX_CONTEXT_LENGTH = plugin_config.max_context_length
 
 endpoint = "https://models.inference.ai.azure.com"
@@ -59,10 +62,12 @@ async def handle_function(args: Message = CommandArg()):
     reply = response.choices[0].message.content
     shared_context.append({"role": "assistant", "content": reply})
 
-
-    pic = await md_to_pic(md=reply)
-    await UniMessage.image(raw=pic).send(reply_to=True)
-		
+    if REPLY_IMAGE:
+        pic = await md_to_pic(md=reply)
+        await UniMessage.image(raw=pic).send(reply_to=True)
+    else:
+        await UniMessage.text(reply).send(reply_to=True)
+			
 __plugin_meta__ = PluginMetadata(
     name="githubmodels",
     description="API 调用 GitHub Models 的大语言模型",
