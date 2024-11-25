@@ -42,4 +42,4 @@ nb plugin install nonebot-plugin-githubmodels
 
 # 配置
 
-## 见 [.env.example]()
+## 见 [.env.example](https://github.com/lyqgzbl/nonebot-plugin-githubmodels/blob/main/.env.example)
