@@ -42,29 +42,4 @@ nb plugin install nonebot-plugin-githubmodels
 
 # 配置
 
-## GitHub token 必须配置 环境配置
-
-```
-GITHUB.TOKEN = "xxxx"
-```
-
-## 所使用的模型 可选配置 环境配置
-
-gpt-4o
-
-gpt-4o-mini
-
-默认值为gpt-4o-mini
-
-```
-AI.MODEL.NAME = gpt-4o-mini
-```
-
-## 记忆的上下文数量 可选配置 环境配置
-默认值为20
-
-```
-MAX.CONTEXT.LENGTH = 20
-```
-
-
+## 见 [.env.example]()
