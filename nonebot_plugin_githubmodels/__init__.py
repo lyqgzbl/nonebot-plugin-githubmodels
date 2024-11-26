@@ -10,10 +10,10 @@ from nonebot import get_plugin_config
 from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
 from nonebot_plugin_htmlrender import md_to_pic
-from nonebot_plugin_alconna import UniMessage, Image 
+from nonebot_plugin_alconna import UniMessage, Image
 
 plugin_config = get_plugin_config(Config)
-TOKEN = plugin_config.github_token 
+TOKEN = plugin_config.github_token
 MODEL_NAME = plugin_config.ai_model_name
 REPLY_IMAGE = plugin_config.ai_reply_image
 MAX_CONTEXT_LENGTH = plugin_config.max_context_length
@@ -35,22 +35,22 @@ async def handle_function(args: Message = CommandArg()):
     if user_input.lower() == "重置":
         shared_context = []
         await AI.finish("上下文已重置")
-    
+
     if not user_input:
         await AI.finish("请输入有效的问题")
-    
+
     shared_context.append({"role": "user", "content": user_input})
-    
+
     if len(shared_context) > MAX_CONTEXT_LENGTH:
         shared_context = shared_context[-MAX_CONTEXT_LENGTH:]
-    
+
     messages = [
         {
             "role": "system",
             "content": "回答尽量简练，请始终用中文回答。",
         }
     ] + shared_context
-    
+
     response = await client.chat.completions.create(
         messages=messages,
         model=MODEL_NAME,
@@ -58,7 +58,7 @@ async def handle_function(args: Message = CommandArg()):
         max_tokens=500,
         top_p=1,
     )
-    
+
     reply = response.choices[0].message.content
     shared_context.append({"role": "assistant", "content": reply})
 
@@ -67,7 +67,7 @@ async def handle_function(args: Message = CommandArg()):
         await UniMessage.image(raw=pic).send(reply_to=True)
     else:
         await UniMessage.text(reply).send(reply_to=True)
-			
+
 __plugin_meta__ = PluginMetadata(
     name="githubmodels",
     description="API 调用 GitHub Models 的大语言模型",
