@@ -1,16 +1,13 @@
 import nonebot
-from .config import Config
-from nonebot import require
-from openai import AsyncOpenAI
-from nonebot import on_command
+from nonebot import require, get_plugin_config
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
-from nonebot.adapters import Message
-from nonebot import get_plugin_config
-from nonebot.params import CommandArg
+from openai import AsyncOpenAI
+from arclet.alconna import Args, Option, Alconna
 from nonebot.plugin import PluginMetadata
 from nonebot_plugin_htmlrender import md_to_pic
-from nonebot_plugin_alconna import UniMessage, Image
+from nonebot_plugin_alconna import UniMessage, on_alconna, Match
+from .config import Config
 
 plugin_config = get_plugin_config(Config)
 TOKEN = plugin_config.github_token
@@ -25,29 +22,39 @@ client = AsyncOpenAI(
 )
 shared_context = []
 
-AI = on_command("AI", priority=10, block=True)
+ai = on_alconna(
+    Alconna(
+        "AI",
+        Args["user_input?", str],
+        Option("-重置|--reset"),
+    ),
+    use_cmd_start=True,
+    block=True,
+    aliases={"ai"},
+)
 
-@AI.handle()
-async def handle_function(args: Message = CommandArg()):
+@ai.assign("resett")
+async def ai_reset():
     global shared_context
-    user_input = args.extract_plain_text().strip()
+    shared_context = []
+    await ai.finish("上下文已重置")
 
-    if user_input.lower() == "重置":
-        shared_context = []
-        await AI.finish("上下文已重置")
+@ai.handle()
+async def handle_function(user_input: Match[str]):
+    if user_input.available:
+        ai.set_path_arg("user_input", user_input.result)
 
-    if not user_input:
-        await AI.finish("请输入有效的问题")
-
+@ai.got_path("user_input", prompt="请输入有效问题")
+async def got_location(user_input: str):
+    global shared_context
     shared_context.append({"role": "user", "content": user_input})
-
     if len(shared_context) > MAX_CONTEXT_LENGTH:
         shared_context = shared_context[-MAX_CONTEXT_LENGTH:]
 
     messages = [
         {
             "role": "system",
-            "content": "回答尽量简练，请始终用中文回答。",
+            "content": "回答尽量简练,请始终用中文回答",
         }
     ] + shared_context
 

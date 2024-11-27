@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-githubmodels"
-version = "0.1.8"
+version = "0.1.9"
 description = "API 调用 GitHub Models 的大语言模型"
 authors = ["lyqgzbl <admin@lyqgzbl.com>"]
 license = "MIT"
