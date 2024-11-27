@@ -33,7 +33,7 @@ ai = on_alconna(
     aliases={"ai"},
 )
 
-@ai.assign("resett")
+@ai.assign("reset")
 async def ai_reset():
     global shared_context
     shared_context = []
