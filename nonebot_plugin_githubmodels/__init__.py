@@ -40,7 +40,7 @@ async def ai_reset():
     shared_context = []
     await ai.finish("上下文已重置")
 
-@ai.assgin("image")
+@ai.assign("image")
 async def ai_image(user_input: Match[str]):
     if user_input.available:
         global REPLY_IMAGE
