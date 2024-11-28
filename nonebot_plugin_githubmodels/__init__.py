@@ -27,7 +27,7 @@ ai = on_alconna(
         "AI",
         Args["user_input?", str],
         Option("-r|--reset"),
-        Optino("-i|--image"),
+        Option("-i|--image"),
     ),
     use_cmd_start=True,
     block=True,
