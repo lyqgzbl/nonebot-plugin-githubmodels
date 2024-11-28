@@ -26,7 +26,8 @@ ai = on_alconna(
     Alconna(
         "AI",
         Args["user_input?", str],
-        Option("-重置|--reset"),
+        Option("-r|--reset"),
+        Optino("-i|--image"),
     ),
     use_cmd_start=True,
     block=True,
@@ -38,6 +39,13 @@ async def ai_reset():
     global shared_context
     shared_context = []
     await ai.finish("上下文已重置")
+
+@ai.assgin("image")
+async def ai_image(user_input: Match[str]):
+    if user_input.available:
+        global REPLY_IMAGE
+        REPLY_IMAGE = True
+        ai.set_path_arg("user_input", user_input.result)
 
 @ai.handle()
 async def handle_function(user_input: Match[str]):
