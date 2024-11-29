@@ -3,7 +3,7 @@ from nonebot import require, get_plugin_config
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
 from openai import AsyncOpenAI
-from arclet.alconna import Args, Option, Alconna
+from arclet.alconna import Args, Option, Alconna, MultiVar
 from nonebot.plugin import PluginMetadata
 from nonebot_plugin_htmlrender import md_to_pic
 from nonebot_plugin_alconna import UniMessage, on_alconna, Match
@@ -25,7 +25,7 @@ shared_context = []
 ai = on_alconna(
     Alconna(
         "AI",
-        Args["user_input?", str],
+        Args["user_input?", MultiVar(str)],
         Option("-r|--reset"),
         Option("-i|--image"),
     ),
@@ -41,16 +41,16 @@ async def ai_reset():
     await ai.finish("上下文已重置")
 
 @ai.assign("image")
-async def ai_image(user_input: Match[str]):
+async def ai_image(user_input: Match[tuple[str]]):
     if user_input.available:
         global REPLY_IMAGE
         REPLY_IMAGE = True
-        ai.set_path_arg("user_input", user_input.result)
+        ai.set_path_arg("user_input", " ".join(user_input.result))
 
 @ai.handle()
-async def handle_function(user_input: Match[str]):
+async def handle_function(user_input: Match[tuple[str]]):
     if user_input.available:
-        ai.set_path_arg("user_input", user_input.result)
+        ai.set_path_arg("user_input", " ".join(user_input.result))
 
 @ai.got_path("user_input", prompt="请输入有效问题")
 async def got_location(user_input: str):
