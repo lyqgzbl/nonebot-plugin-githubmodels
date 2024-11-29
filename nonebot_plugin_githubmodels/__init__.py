@@ -54,8 +54,6 @@ async def handle_function(user_input: Match[str]):
 
 @ai.got_path("user_input", prompt="请输入有效问题")
 async def got_location(user_input: str):
-    if not user_input.strip():
-        await ai.reject("你真的输入了有效问题吗?请输入有效问题")
     global shared_context
     shared_context.append({"role": "user", "content": user_input})
     if len(shared_context) > MAX_CONTEXT_LENGTH:
