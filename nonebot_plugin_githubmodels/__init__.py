@@ -54,19 +54,22 @@ async def handle_function(user_input: Match[tuple[str]]):
 
 @ai.got_path("user_input", prompt="请输入有效问题")
 async def got_location(user_input: str):
-    global shared_context
-    shared_context.append({"role": "user", "content": user_input})
-    if len(shared_context) > MAX_CONTEXT_LENGTH:
-        shared_context = shared_context[-MAX_CONTEXT_LENGTH:]
+    global shared_context, REPLY_IMAGE
+    if MAX_CONTEXT_LENGTH > 0:
+        shared_context.append({"role": "user", "content": user_input})
+        if len(shared_context) > MAX_CONTEXT_LENGTH:
+            shared_context = shared_context[-MAX_CONTEXT_LENGTH:]
 
     messages = [
-        {
-            "role": "system",
-            "content": "回答尽量简练,请始终用中文回答",
-        }
-    ] + shared_context
+        {"role": "system", "content": "回答尽量简练,请始终用中文回答"}
+    ]
+    if MAX_CONTEXT_LENGTH > 0:
+        messages += shared_context
+    else:
+        messages.append({"role": "user", "content": user_input})
 
-    response = await client.chat.completions.create(
+    try:
+        response = await client.chat.completions.create(
         messages=messages,
         model=MODEL_NAME,
         temperature=1,
@@ -74,14 +77,17 @@ async def got_location(user_input: str):
         top_p=1,
     )
 
-    reply = response.choices[0].message.content
-    shared_context.append({"role": "assistant", "content": reply})
+        reply = response.choices[0].message.content
+        if MAX_CONTEXT_LENGTH > 0:
+            shared_context.append({"role": "assistant", "content": reply})
 
-    if REPLY_IMAGE:
-        pic = await md_to_pic(md=reply)
-        await UniMessage.image(raw=pic).send(reply_to=True)
-    else:
-        await UniMessage.text(reply).send(reply_to=True)
+        if REPLY_IMAGE:
+            pic = await md_to_pic(md=reply)
+            await UniMessage.image(raw=pic).send(reply_to=True)
+        else:
+            await UniMessage.text(reply).send(reply_to=True)
+    finally:
+        REPLY_IMAGE = plugin_config.ai_reply_image
 
 __plugin_meta__ = PluginMetadata(
     name="githubmodels",
