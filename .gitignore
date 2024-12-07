@@ -2,3 +2,6 @@ dist/
 *.whl
 *.tar.gz
 .vscode/
+arcaea/
+nonebot_plugin_githubmodels/__pycache__/
+.DS_Store
