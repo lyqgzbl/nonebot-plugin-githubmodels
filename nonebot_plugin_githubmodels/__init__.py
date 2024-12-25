@@ -51,7 +51,7 @@ ai = on_alconna(
         Option("-i|--image"),
     ),
     rule=is_enable(),
-		use_cmd_start=True,
+    use_cmd_start=True,
     block=True,
     aliases={"ai"},
 )
