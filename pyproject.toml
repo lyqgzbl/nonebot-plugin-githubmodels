@@ -1,12 +1,14 @@
 [tool.poetry]
 name = "nonebot-plugin-githubmodels"
 version = "0.2.6"
-description = "API 调用 GitHub Models 的大语言模型"
+description = "一个调用 GitHub Models 的 AI 对话插件"
 readme = "README.md"
 authors = ["lyqgzbl <admin@lyqgzbl.com>"]
 license = "MIT"
 homepage = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
 repository = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
+documentation = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels#readme"
+keywords = ["nonebot2", "GitHub Models"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -18,8 +20,3 @@ nonebot-plugin-alconna = "^0.54.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.nonebot.plugin]
-name = "githubmodels"
-description = "API 调用 GitHub Models 的大语言模型"
-type = "application"
