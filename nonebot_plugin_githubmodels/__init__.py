@@ -22,7 +22,7 @@ __plugin_meta__ = PluginMetadata(
     usage="/AI Hello",
     type="application",
     homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
-		config=Config,
+    config=Config,
     supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna"),
 )
 
