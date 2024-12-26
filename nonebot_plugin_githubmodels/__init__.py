@@ -6,6 +6,7 @@ from nonebot.plugin import PluginMetadata
 
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
+from openai import BadRequestError
 from arclet.alconna import Args, Option, Alconna, MultiVar
 from nonebot_plugin_alconna import UniMessage, on_alconna, Match
 from nonebot_plugin_htmlrender import md_to_pic
@@ -91,6 +92,9 @@ async def got_location(user_input: str):
             await UniMessage.image(raw=pic).send(reply_to=True)
         else:
             await UniMessage.text(reply).send(reply_to=True)
+    except BadRequestError as e:
+        logger.opt(colors=True).error(f"<red>API 请求失败: {e}</red>")
+        await ai.send("问题触发了内容过滤策略,请修改问题后重试")
     finally:
         REPLY_IMAGE = plugin_config.ai_reply_image
 
