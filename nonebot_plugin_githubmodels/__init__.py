@@ -2,12 +2,12 @@ import nonebot
 from nonebot import require, get_plugin_config
 from nonebot.rule import Rule
 from nonebot.log import logger
-from nonebot.plugin import PluginMetadata, inherit_supported_adaptersinherit_supported_adapters
+from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
 from openai import BadRequestError
-from arclet.alconna import Args, Option, Alconna, MultiVar
+from arclet.alconna import Args, Option, Alconna, MultiVar, CommandMeta
 from nonebot_plugin_alconna import UniMessage, on_alconna, Match
 from nonebot_plugin_htmlrender import md_to_pic
 
@@ -59,8 +59,14 @@ ai = on_alconna(
     Alconna(
         "AI",
         Args["user_input?", MultiVar(str)],
-        Option("-r|--reset"),
-        Option("-i|--image"),
+        Option("-r|--reset", help_text="重置上下文记忆"),
+        Option("-i|--image", help_text="临时启用图片回复"),
+				meta=CommandMeta(
+            description="AI 对话插件",
+            usage=__plugin_meta__.usage,
+            example="/AI Hello; /AI -i Hello; /AI -r",
+            compact=True,
+        ),
     ),
     rule=is_enable(),
     use_cmd_start=True,
