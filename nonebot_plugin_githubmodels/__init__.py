@@ -2,7 +2,7 @@ import nonebot
 from nonebot import require, get_plugin_config
 from nonebot.rule import Rule
 from nonebot.log import logger
-from nonebot.plugin import PluginMetadata
+from nonebot.plugin import PluginMetadata, inherit_supported_adaptersinherit_supported_adapters
 
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
@@ -14,6 +14,17 @@ from nonebot_plugin_htmlrender import md_to_pic
 from .config import Config
 from .GPT_handler import GPTHandler
 from .context_manager import ContextManager
+
+
+__plugin_meta__ = PluginMetadata(
+    name="GitHub Models",
+    description="一个调用 GitHub Models 的 AI 对话插件",
+    usage="/AI Hello",
+    type="application",
+    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
+		config=Config,
+    supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna"),
+)
 
 
 plugin_config = get_plugin_config(Config)
@@ -97,13 +108,3 @@ async def got_location(user_input: str):
         await ai.send("问题触发了内容过滤策略,请修改问题后重试")
     finally:
         REPLY_IMAGE = plugin_config.ai_reply_image
-
-
-__plugin_meta__ = PluginMetadata(
-    name="githubmodels",
-    description="API 调用 GitHub Models 的大语言模型",
-    usage="AI",
-    type="application",
-    homepage="https://github.com/lyqgzbl/nonebot-plugin-githubmodels",
-    supported_adapters=None,
-)
