@@ -97,6 +97,9 @@ async def handle_function(user_input: Match[tuple[str]]):
 
 @ai.got_path("user_input", prompt="请输入有效问题")
 async def got_location(user_input: str):
+    import datetime
+    from pathlib import Path
+
     global REPLY_IMAGE
     try:
         messages = [{"role": "system", "content": "回答尽量简练,请始终用中文回答"}]
@@ -105,7 +108,13 @@ async def got_location(user_input: str):
         reply = await GPT_handler.get_response(messages)
         context_manager.add_message("assistant", reply)
         if REPLY_IMAGE:
-            pic = await md_to_pic(md=reply)
+            current_hour = datetime.datetime.now().hour
+            is_dark_mode = 18 <= current_hour or current_hour < 6
+
+            css_file = (
+                Path(__file__).parent / "css" / ("dark.css" if is_dark_mode else "light.css")
+            )
+            pic = await md_to_pic(md=reply, css_path=str(css_file))
             await UniMessage.image(raw=pic).send(reply_to=True)
         else:
             await UniMessage.text(reply).send(reply_to=True)
