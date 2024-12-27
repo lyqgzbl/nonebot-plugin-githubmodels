@@ -1,9 +1,11 @@
+import datetime
+from pathlib import Path
+
 import nonebot
 from nonebot import require, get_plugin_config
 from nonebot.rule import Rule
 from nonebot.log import logger
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
-
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
 from openai import BadRequestError
@@ -97,9 +99,6 @@ async def handle_function(user_input: Match[tuple[str]]):
 
 @ai.got_path("user_input", prompt="请输入有效问题")
 async def got_location(user_input: str):
-    import datetime
-    from pathlib import Path
-
     global REPLY_IMAGE
     try:
         messages = [{"role": "system", "content": "回答尽量简练,请始终用中文回答"}]
@@ -110,7 +109,6 @@ async def got_location(user_input: str):
         if REPLY_IMAGE:
             current_hour = datetime.datetime.now().hour
             is_dark_mode = 18 <= current_hour or current_hour < 6
-
             css_file = (
                 Path(__file__).parent / "css" / ("dark.css" if is_dark_mode else "light.css")
             )
