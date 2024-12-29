@@ -14,7 +14,7 @@ keywords = ["nonebot2", "GitHub Models"]
 python = "^3.8"
 nonebot2 = "^2.2.1"
 openai = "^1.44.1"
-nonebot-plugin-htmlrender = "^0.3.5"
+nonebot-plugin-htmlrender = "^0.5.0"
 nonebot-plugin-alconna = "^0.54.0"
 
 [build-system]
