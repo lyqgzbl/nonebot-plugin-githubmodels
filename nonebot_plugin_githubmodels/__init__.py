@@ -63,7 +63,7 @@ ai = on_alconna(
         Args["user_input?", MultiVar(str)],
         Option("-r|--reset", help_text="重置上下文记忆"),
         Option("-i|--image", help_text="临时启用图片回复"),
-				meta=CommandMeta(
+        meta=CommandMeta(
             description="AI 对话插件",
             usage=__plugin_meta__.usage,
             example="/AI Hello; /AI -i Hello; /AI -r",
