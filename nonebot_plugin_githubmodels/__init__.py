@@ -14,7 +14,7 @@ from nonebot_plugin_alconna import UniMessage, on_alconna, Match
 from nonebot_plugin_htmlrender import md_to_pic
 
 from .config import Config
-from .GPT_handler import GPTHandler
+from .openai_handler import OPENAI_Handler
 from .context_manager import ContextManager
 
 
@@ -35,9 +35,9 @@ REPLY_IMAGE = plugin_config.ai_reply_image
 
 if not plugin_config.github_token:
     logger.opt(colors=True).warning("<yellow>缺失必要配置项 'github_token'，已禁用该插件</yellow>")
-    GPT_handler = None
+    openai_handler = None
 else:
-    GPT_handler = GPTHandler(
+    openai_handler = OPENAI_Handler(
         api_key=plugin_config.github_token,
         endpoint="https://models.inference.ai.azure.com",
         model_name=plugin_config.ai_model_name,
@@ -104,7 +104,7 @@ async def got_location(user_input: str):
         messages = [{"role": "system", "content": "回答尽量简练,请始终用中文回答"}]
         context_manager.add_message("user", user_input)
         messages += context_manager.get_context()
-        reply = await GPT_handler.get_response(messages)
+        reply = await openai_handler.get_response(messages)
         context_manager.add_message("assistant", reply)
         if REPLY_IMAGE:
             current_hour = datetime.datetime.now().hour

@@ -1,6 +1,6 @@
 from openai import AsyncOpenAI
 
-class GPTHandler:
+class OPENAI_Handler:
     def __init__(
         self,
         api_key: str,
