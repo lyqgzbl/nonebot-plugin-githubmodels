@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-githubmodels"
-version = "0.2.7"
+version = "0.2.8"
 description = "一个调用 GitHub Models 的 AI 对话插件"
 readme = "README.md"
 authors = ["lyqgzbl <admin@lyqgzbl.com>"]
