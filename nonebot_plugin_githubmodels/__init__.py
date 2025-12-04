@@ -44,7 +44,6 @@ else:
         model_name=plugin_config.ai_model_name,
         max_context_length=plugin_config.max_context_length,
         temperature=plugin_config.ai_temperature,
-        max_tokens=plugin_config.ai_max_tokens,
         top_p=plugin_config.ai_top_p,
     )
 

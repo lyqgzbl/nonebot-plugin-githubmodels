@@ -6,5 +6,4 @@ class Config(BaseModel):
     ai_reply_image: bool = False
     ai_model_name: str = "openai/gpt-4.1-mini"
     ai_temperature: float = Field(1.0)
-    ai_max_tokens: int = Field(1024)
     ai_top_p: float = Field(1.0)

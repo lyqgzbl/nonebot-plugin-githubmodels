@@ -12,7 +12,6 @@ class OPENAI_Handler:
         model_name: str,
         max_context_length: int,
         temperature: float,
-        max_tokens: int,
         top_p: float,
     ):
         self.client = ChatCompletionsClient(
@@ -22,7 +21,6 @@ class OPENAI_Handler:
         self.model_name = model_name
         self.max_context_length = max_context_length
         self.temperature = temperature
-        self.max_tokens = max_tokens
         self.top_p = top_p
 
     async def get_response(self, messages: Sequence[ChatRequestMessage]) -> str:
@@ -30,7 +28,6 @@ class OPENAI_Handler:
             messages=list(messages),
             model=self.model_name,
             temperature=self.temperature,
-            max_tokens=self.max_tokens,
             top_p=self.top_p,
         )
         content = response.choices[0].message.content
