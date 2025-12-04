@@ -64,7 +64,7 @@ pip install nonebot-plugin-githubmodels
 ### ai_model_name [选填]
 
 - 类型: `str`
-- 默认: `gpt-4o-mini`
+- 默认: `openai/gpt-4.1-mini`
 - 说明: 所使用的模型
 
 ### ai_temperature [选填]
@@ -72,12 +72,6 @@ pip install nonebot-plugin-githubmodels
 - 类型: `float`
 - 默认: `1.0`
 - 说明: 生成的文本的多样性和连贯性
-
-### ai_max_tokens [选填]
-
-- 类型: `int`
-- 默认: `1024`
-- 说明: 模型生成文本的字数
 
 ## ai_top_p [选填]
 
