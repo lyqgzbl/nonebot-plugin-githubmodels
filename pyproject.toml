@@ -1,22 +1,45 @@
-[tool.poetry]
+[project]
 name = "nonebot-plugin-githubmodels"
-version = "0.2.8"
-description = "一个调用 GitHub Models 的 AI 对话插件"
+version = "0.1.3"
+description = "NoneBot 集成 GitHub Copilot 和 OpenAI 的 AI 代码生成模型插件"
 readme = "README.md"
-authors = ["lyqgzbl <admin@lyqgzbl.com>"]
+authors = [
+    { name = "lyqgzbl", email = "122811297+lyqgzbl@users.noreply.github.com" }
+]
+requires-python = ">=3.10, <4.0"
 license = "MIT"
-homepage = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
-repository = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels"
-documentation = "https://github.com/lyqgzbl/nonebot-plugin-githubmodels#readme"
-keywords = ["nonebot2", "GitHub Models"]
+dependencies = [
+  "nonebot2 >=2.2.1, <3.0.0",
+  "openai >=1.44.1, <2.0.0",
+  "nonebot-plugin-htmlrender >=0.5.0, <1.0.0",
+  "nonebot-plugin-alconna >=0.54.0, <1.0.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-nonebot2 = "^2.2.1"
-openai = "^1.44.1"
-nonebot-plugin-htmlrender = "^0.5.0"
-nonebot-plugin-alconna = "^0.54.0"
+[project.urls]
+homepage = "https://github.com/lyqgzbl/nonebot-plugin-daily-bing"
+repository = "https://github.com/lyqgzbl/nonebot-plugin-daily-bing"
+documentation = "https://github.com/lyqgzbl/nonebot-plugin-daily-bing#readme"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.8.17,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.0",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "UP", "C", "T", "PYI", "PT", "Q"]
+ignore = ["E402", "C901"]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

@@ -1,17 +1,17 @@
 import datetime
 from pathlib import Path
 
-import nonebot
-from nonebot import require, get_plugin_config
+
 from nonebot.rule import Rule
 from nonebot.log import logger
+from nonebot import require, get_plugin_config
+from azure.ai.inference.models import SystemMessage
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
-from openai import BadRequestError
-from arclet.alconna import Args, Option, Alconna, MultiVar, CommandMeta
-from nonebot_plugin_alconna import UniMessage, on_alconna, Match
 from nonebot_plugin_htmlrender import md_to_pic
+from nonebot_plugin_alconna import UniMessage, on_alconna, Match
+from arclet.alconna import Args, Option, Alconna, MultiVar, CommandMeta
 
 from .config import Config
 from .openai_handler import OPENAI_Handler
@@ -34,12 +34,13 @@ REPLY_IMAGE = plugin_config.ai_reply_image
 
 
 if not plugin_config.github_token:
-    logger.opt(colors=True).warning("<yellow>缺失必要配置项 'github_token'，已禁用该插件</yellow>")
-    openai_handler = None
+    logger.opt(colors=True).warning("<yellow>缺失必要配置项 'github_token'，" \
+    "已禁用该插件</yellow>")
+    Openai_Handler = None
 else:
-    openai_handler = OPENAI_Handler(
+    Openai_Handler = OPENAI_Handler(
         api_key=plugin_config.github_token,
-        endpoint="https://models.inference.ai.azure.com",
+        endpoint="https://models.github.ai/inference",
         model_name=plugin_config.ai_model_name,
         max_context_length=plugin_config.max_context_length,
         temperature=plugin_config.ai_temperature,
@@ -54,7 +55,7 @@ def is_enable() -> Rule:
     return Rule(_rule)
 
 
-context_manager = ContextManager(max_context_length=plugin_config.max_context_length)
+Context_Manager = ContextManager(max_context_length=plugin_config.max_context_length)
 
 
 ai = on_alconna(
@@ -79,7 +80,7 @@ ai = on_alconna(
 
 @ai.assign("reset")
 async def ai_reset():
-    context_manager.reset_context()
+    Context_Manager.reset_context()
     await ai.finish("上下文已重置")
 
 
@@ -101,22 +102,24 @@ async def handle_function(user_input: Match[tuple[str]]):
 async def got_location(user_input: str):
     global REPLY_IMAGE
     try:
-        messages = [{"role": "system", "content": "回答尽量简练,请始终用中文回答"}]
-        context_manager.add_message("user", user_input)
-        messages += context_manager.get_context()
-        reply = await openai_handler.get_response(messages)
-        context_manager.add_message("assistant", reply)
+        messages = [SystemMessage(content="回答尽量简练,请始终用中文回答")]
+        Context_Manager.add_message("user", user_input)
+        messages += Context_Manager.get_context()
+        if Openai_Handler is not None:
+            reply = await Openai_Handler.get_response(messages)
+        Context_Manager.add_message("assistant", reply)
         if REPLY_IMAGE:
             current_hour = datetime.datetime.now().hour
             is_dark_mode = 18 <= current_hour or current_hour < 6
             css_file = (
-                Path(__file__).parent / "css" / ("dark.css" if is_dark_mode else "light.css")
+                Path(__file__).
+                parent / "css" / ("dark.css" if is_dark_mode else "light.css")
             )
             pic = await md_to_pic(md=reply, css_path=str(css_file))
             await UniMessage.image(raw=pic).send(reply_to=True)
         else:
             await UniMessage.text(reply).send(reply_to=True)
-    except BadRequestError as e:
+    except Exception as e:
         logger.opt(colors=True).error(f"<red>API 请求失败: {e}</red>")
         await ai.send("问题触发了内容过滤策略,请修改问题后重试")
     finally:
