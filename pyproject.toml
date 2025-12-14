@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-githubmodels"
-version = "1.0.0"
+version = "1.0.1"
 description = "NoneBot 集成 GitHub Copilot 和 OpenAI 的 AI 代码生成模型插件"
 readme = "README.md"
 authors = [
